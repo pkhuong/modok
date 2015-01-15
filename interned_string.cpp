@@ -10,7 +10,7 @@ const char *
 intern_string(const char *string)
 {
 	std::string key(string);
-	const char *&ret(table[key]);
+	auto &ret(table[key]);
 
 	if (ret != NULL) {
 		return ret;
