@@ -68,7 +68,7 @@ random_instance(const range_t &rows, const range_t &columns, const svec &expecte
 	}
 
 	for (auto column : columns) {
-		ret.new_var(column, -HUGE_VAL, HUGE_VAL);
+		ret.new_var(column, -0.8, HUGE_VAL);
 	}
 
 	for (auto row : rows) {
@@ -92,10 +92,10 @@ random_instance(const range_t &rows, const range_t &columns, const svec &expecte
 int
 main()
 {
-	const range_t rows(make_range("row", 200));
-	const range_t cols(make_range("col", 200));
+	const range_t rows(make_range("row", 1000));
+	const range_t cols(make_range("col", 1000));
 	const svec expected(random_vector(cols, -1, 1));
-	const double scale(1.0 / 20);
+	const double scale(1.0 / 100);
 
 	instance_t instance(random_instance(rows, cols, expected, 10));
 	state_t state(instance, scale, true);
