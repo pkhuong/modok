@@ -148,6 +148,20 @@ state_t::state_t(const struct instance_t &instance_, double sample_rate_, double
 	: instance(instance_),
 	  sample_rate(round_sample_rate(instance, sample_rate_)),
 	  theta(std::isnan(theta_) ? sample_rate : theta_)
-{}
+{
+	for (auto var : instance.all_vars) {
+		auto name(var->name);
+
+		x[name] = u[name] = z[name] = 0;
+	}
+
+	for (auto row : instance.all_rows) {
+		auto name(row->name);
+
+		ru[name] = rz[name] = 0;
+	}
+
+	return;
+}
 
 }
