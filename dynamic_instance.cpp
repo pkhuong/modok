@@ -135,10 +135,19 @@ state_t::get_x()
 	return x;
 }
 
+static double
+round_sample_rate(const struct instance_t &instance, double sample_rate)
+{
+	double n(instance.vars.size());
+	double m(std::ceil(n * sample_rate));
+
+	return 1.0 * m / n;
+}
+	
 state_t::state_t(const struct instance_t &instance_, double sample_rate_, double theta_)
 	: instance(instance_),
-	  theta(std::isnan(theta_) ? sample_rate_ : theta_),
-	  sample_rate(sample_rate_)
+	  sample_rate(round_sample_rate(instance, sample_rate_)),
+	  theta(std::isnan(theta_) ? sample_rate : theta_)
 {}
 
 }

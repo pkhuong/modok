@@ -108,8 +108,8 @@ struct state_t {
 	svec x;
 	svec u, z;
 	svec ru, rz;
-	double theta;
 	const double sample_rate;
+	double theta;
 
 	const svec &get_x();
 	state_t(const struct instance_t &, double sample_rate, double theta = std::nan(""));
