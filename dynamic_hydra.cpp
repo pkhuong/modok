@@ -12,6 +12,10 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 	const double theta_2(state.theta * state.theta);
 	double df(instance.linear.coefs.find(name)->second);
 
+	if (variable->vector.empty()) {
+		return;
+	}
+
 	for (auto it : variable->vector) {
 		const char *name(it.first);
 		const double ax(theta_2 * state.ru[name] + state.rz[name]);
