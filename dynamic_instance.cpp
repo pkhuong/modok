@@ -144,10 +144,11 @@ round_sample_rate(const struct instance_t &instance, double sample_rate)
 	return 1.0 * m / n;
 }
 	
-state_t::state_t(const struct instance_t &instance_, double sample_rate_, double theta_)
+state_t::state_t(const struct instance_t &instance_, double sample_rate_, bool accelerated_)
 	: instance(instance_),
 	  sample_rate(round_sample_rate(instance, sample_rate_)),
-	  theta(std::isnan(theta_) ? sample_rate : theta_)
+	  theta(sample_rate),
+	  accelerated(accelerated_)
 {
 	for (auto var : instance.all_vars) {
 		auto name(var->name);

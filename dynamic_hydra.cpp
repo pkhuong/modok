@@ -53,7 +53,9 @@ one_iteration(struct state_t &state)
 		coordinate_descent(state, vars[i]);
 	}
 
-	state.theta = 0.5 * (std::sqrt(std::pow(theta, 4) + 4 * theta * theta) - theta * theta);
+	if (state.accelerated) {
+		state.theta = 0.5 * (std::sqrt(std::pow(theta, 4) + 4 * theta * theta) - theta * theta);
+	}
 	return;
 }
 

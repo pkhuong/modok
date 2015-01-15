@@ -110,9 +110,10 @@ struct state_t {
 	svec ru, rz;
 	const double sample_rate;
 	double theta;
+	bool accelerated;
 
 	const svec &get_x();
-	state_t(const struct instance_t &, double sample_rate, double theta = std::nan(""));
+	state_t(const struct instance_t &, double sample_rate, bool accelerated = true);
 };
 
 }
