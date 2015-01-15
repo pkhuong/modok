@@ -51,7 +51,7 @@ one_iteration(struct state_t &state)
 	std::vector<column_t> vars(state.instance.all_vars);
 	const size_t n(std::ceil(vars.size() * state.sample_rate));
 	const double theta(state.theta);
-	
+
 	std::random_shuffle(vars.begin(), vars.end());
 	for (size_t i = 0; i < n; i++) {
 		coordinate_descent(state, vars[i]);

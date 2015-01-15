@@ -132,6 +132,13 @@ state_t::get_x()
 		x[it.first] += theta_2 * it.second;
 	}
 
+	for (auto &it : x) {
+		auto name(it.first);
+		auto var(instance.vars.find(name)->second);
+
+		it.second = std::min(var->max, std::max(var->min, it.second));
+	}
+
 	return x;
 }
 
