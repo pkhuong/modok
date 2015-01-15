@@ -20,7 +20,7 @@ make_range(const char *prefix, size_t n)
 	range_t ret;
 
 	for (size_t i = 0; i < n; i++) {
-		sprintf(buf, "%s-%zu\n", prefix, i);
+		sprintf(buf, "%s-%zu", prefix, i);
 		ret.push_back(intern_string(buf));
 	}
 
