@@ -128,7 +128,8 @@ main()
 			  << instance.eval(x) << "\t"
 			  << instance.eval(state.z) << "\t"
 			  << estimate_value(state) << "\t"
-			  << delta << std::endl;
+			  << delta << "\t"
+			  << state.projected_gradient_norm() << std::endl;
 	}
 
 	return 0;
