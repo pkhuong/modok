@@ -166,7 +166,8 @@ state_t::state_t(const struct instance_t &instance_, double sample_rate_, bool a
 	for (auto row : instance.all_rows) {
 		auto name(row->name);
 
-		ru[name] = rz[name] = 0;
+		ru[name] = 0;
+		rz[name] = -row->rhs;
 	}
 
 	return;

@@ -19,10 +19,9 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 
 	for (auto it : variable->vector) {
 		const char *name(it.first);
-		const double ax(theta_2 * state.ru[name] + state.rz[name]);
-		const double rhs(it.second.second->rhs);
+		const double ax_b(theta_2 * state.ru[name] + state.rz[name]);
 
-		df += it.second.first * (ax - rhs);
+		df += it.second.first * ax_b;
 	}
 
 	const double quad(variable->step * state.theta / state.sample_rate);
