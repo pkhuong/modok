@@ -23,7 +23,8 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 		const double weight(it.second.first);
 		const double ax_b(theta_2 * state.ru[name] + state.rz[name]);
 
-		df += weight * ax_b;
+		/* static version: assume weight = 1. */
+		df += instance.row_weight.find(name)->second * weight * ax_b;
 	}
 
 	const double quad(state.var_step[name] * state.theta / state.sample_rate);
@@ -103,13 +104,15 @@ update_steps(struct state_t &state)
 		double acc(0);
 
 		for (auto entry : var->vector) {
+			auto name(entry.first);
 			auto row(entry.second.second);
 			const double alpha_1(1 + scale_1 * (row->vector.size() - 1));
 			/* XXX: assuming a single partition for now. */
 			const double alpha_2(scale_2 * 0 * row->vector.size());
 			const double alpha(alpha_1 + alpha_2);
+			const double weight(state.instance.row_weight.find(name)->second);
 
-			acc += alpha * std::pow(entry.second.first, 2);
+			acc += alpha * weight * std::pow(entry.second.first, 2);
 		}
 
 		state.var_step[var->name] = acc;
