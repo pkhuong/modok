@@ -212,7 +212,7 @@ state_t::projected_gradient_norm()
 		l_one += std::abs(delta);
 	}
 
-	return std::max(l_one / n_vars, std::max(std::sqrt(acc) / n_vars, l_inf));
+	return l_one / n_vars + std::sqrt(acc) / n_vars + l_inf;
 }
 
 static double
