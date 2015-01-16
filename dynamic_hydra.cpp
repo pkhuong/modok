@@ -26,7 +26,7 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 		df += weight * ax_b;
 	}
 
-	const double quad(variable->step * state.theta / state.sample_rate);
+	const double quad(state.var_step[name] * state.theta / state.sample_rate);
 	/* zero quad + df = 0 --> zero = -df / quad */
 	const double zero(-df / quad);
 	{
@@ -112,7 +112,7 @@ update_steps(struct state_t &state)
 			acc += alpha * std::pow(entry.second.first, 2);
 		}
 
-		var->step = acc;
+		state.var_step[var->name] = acc;
 	}
 
 	return;

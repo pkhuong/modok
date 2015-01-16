@@ -42,26 +42,22 @@ public:
 struct column_value {
 	const char *name;
 	double min, max;
-	double step; /* Dii */
 	std::map<const char *, std::pair<double, row_t> > vector;
 
 private:
 	column_value(const char *name_,
-	    double min_ = 0, double max_ = HUGE_VAL,
-	    double step_ = 1)
+	    double min_ = 0, double max_ = HUGE_VAL)
 		: name(name_),
 		  min(min_),
-		  max(max_),
-		  step(step_)		  
+		  max(max_)
 	{};
 
 public:
 	static column_t
 	make(const char *name,
-	    double min = 0, double max = HUGE_VAL,
-	    double step = 1)
+	    double min = 0, double max = HUGE_VAL)
 	{
-		return column_t(new column_value(name, min, max, step));
+		return column_t(new column_value(name, min, max));
 	}
 };
 
@@ -104,6 +100,7 @@ struct instance_t {
 
 struct state_t {
 	const struct instance_t &instance;
+	std::map<const char *, double> var_step;
 	svec x;
 	svec u, z;
 	svec ru, rz;
