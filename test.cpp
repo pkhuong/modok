@@ -69,7 +69,7 @@ random_instance(const range_t &rows, const range_t &columns, const svec &expecte
 	}
 
 	for (auto column : columns) {
-		ret.new_var(column, -0.8, HUGE_VAL);
+		ret.new_var(column, -HUGE_VAL, HUGE_VAL);
 	}
 
 	for (auto row : rows) {
@@ -104,9 +104,11 @@ main()
 	update_steps(state);
 	std::cout << "It " << 0 << "\t" << instance.eval(state.get_x()) << std::endl;
 	for (size_t i = 1; i <= 20; i++) {
-		auto x(hydra(state, std::ceil(10 / scale)));
+		auto x(hydra(state, std::ceil(100 / scale)));
 
-		std::cout << "It " << i << "\t" << instance.eval(x) << std::endl;
+		std::cout << "It " << i << "\t"
+			  << instance.eval(x) << "\t"
+			  << instance.eval(state.z) << std::endl;
 	}
 
 	return 0;
