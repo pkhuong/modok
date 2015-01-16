@@ -128,7 +128,7 @@ state_t::get_x()
 	double theta_2 = theta * theta;
 	
 	x = z;
-	for (auto it : z) {
+	for (auto it : u) {
 		x[it.first] += theta_2 * it.second;
 	}
 
@@ -140,6 +140,34 @@ state_t::get_x()
 	}
 
 	return x;
+}
+
+double
+state_t::recompute_discrepancy()
+{
+	double acc = 0;
+
+	for (auto row : instance.all_rows) {
+		auto row_name(row->name);
+		double new_ru(0);
+		double new_rz(-row->rhs);
+
+		for (auto it : row->vector) {
+			auto var_name(it.first);
+			double w(it.second.first);
+
+			new_ru += u[var_name] * w;
+			new_rz += z[var_name] * w;
+		}
+
+		acc += std::pow(ru[row_name] - new_ru, 2);
+		acc += std::pow(rz[row_name] - new_rz, 2);
+
+		ru[row_name] = new_ru;
+		rz[row_name] = new_rz;
+	}
+
+	return acc;
 }
 
 static double

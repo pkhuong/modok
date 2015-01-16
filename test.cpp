@@ -90,6 +90,23 @@ random_instance(const range_t &rows, const range_t &columns, const svec &expecte
 	return ret;
 }
 
+static double
+estimate_value(state_t &state)
+{
+	const double theta_2(state.theta * state.theta);
+	double acc = 0;
+
+	for (auto row : state.instance.all_rows) {
+		auto name(row->name);
+		auto weight(row->weight);
+		const double delta(theta_2 * state.ru[name] + state.rz[name]);
+
+		acc += .5 * weight * std::pow(delta, 2);
+	}
+
+	return acc;
+}
+
 int
 main()
 {
@@ -105,10 +122,13 @@ main()
 	std::cout << "It " << 0 << "\t" << instance.eval(state.get_x()) << std::endl;
 	for (size_t i = 1; i <= 20; i++) {
 		auto x(hydra(state, std::ceil(100 / scale)));
+		double delta(state.recompute_discrepancy());
 
 		std::cout << "It " << i << "\t"
 			  << instance.eval(x) << "\t"
-			  << instance.eval(state.z) << std::endl;
+			  << instance.eval(state.z) << "\t"
+			  << estimate_value(state) << "\t"
+			  << delta << std::endl;
 	}
 
 	return 0;

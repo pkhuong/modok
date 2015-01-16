@@ -20,9 +20,10 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 
 	for (auto it : variable->vector) {
 		const char *name(it.first);
+		const double weight(it.second.first);
 		const double ax_b(theta_2 * state.ru[name] + state.rz[name]);
 
-		df += it.second.first * ax_b;
+		df += weight * it.second.second->weight * ax_b;
 	}
 
 	const double quad(variable->step * state.theta / state.sample_rate);
@@ -45,10 +46,10 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 	state.u[name] += delta_u;
 	for (auto it : variable->vector) {
 		const char *name(it.first);
-		const double weight(it.second.first);
+		double w(it.second.first);
 
-		state.ru[name] += weight * delta_u;
-		state.rz[name] += weight * t;
+		state.ru[name] += w * delta_u;
+		state.rz[name] += w * t;
 	}
 
 	return;
@@ -59,16 +60,20 @@ one_iteration(struct state_t &state)
 {
 	std::vector<column_t> vars(state.instance.all_vars);
 	const size_t n(std::ceil(vars.size() * state.sample_rate));
-	const double k(state.n_iter);
 
-	state.theta = 2 / (k + 2);
+#if 0
+	state.theta = 2 / (state.n_iter + 2);
+#endif
 	std::random_shuffle(vars.begin(), vars.end());
 	for (size_t i = 0; i < n; i++) {
 		coordinate_descent(state, vars[i]);
 	}
 
 	if (state.accelerated) {
+		double theta = state.theta;
+		
 		state.n_iter++;
+		state.theta = 0.5 * (std::sqrt(std::pow(theta, 4) + 4 * theta * theta) - theta * theta);
 	}
 
 	return;

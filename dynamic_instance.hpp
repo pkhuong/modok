@@ -114,6 +114,7 @@ struct state_t {
 	bool accelerated;
 
 	const svec &get_x();
+	double recompute_discrepancy();
 	state_t(const struct instance_t &, double sample_rate, bool accelerated = true);
 };
 
