@@ -72,7 +72,7 @@ one_iteration(struct state_t &state)
 
 	if (state.accelerated) {
 		double theta = state.theta;
-		
+
 		state.n_iter++;
 		state.theta = 0.5 * (std::sqrt(std::pow(theta, 4) + 4 * theta * theta) - theta * theta);
 	}
