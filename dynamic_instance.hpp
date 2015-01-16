@@ -110,6 +110,7 @@ struct state_t {
 	svec ru, rz;
 	const double sample_rate;
 	double theta;
+	double n_iter;
 	bool accelerated;
 
 	const svec &get_x();

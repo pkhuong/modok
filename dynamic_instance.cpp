@@ -157,6 +157,12 @@ state_t::state_t(const struct instance_t &instance_, double sample_rate_, bool a
 	  theta(sample_rate),
 	  accelerated(accelerated_)
 {
+	/*
+	 * 2 / (n_iter + 2) ~= sample_rate
+	 * n_iter = (2 / sample_rate) - 2;
+	 */
+
+	n_iter = (2 / sample_rate) - 2;
 	for (auto var : instance.all_vars) {
 		auto name(var->name);
 

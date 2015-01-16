@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <utility>
+#include <cstdio>
 
 #include "dynamic_instance.hpp"
 
@@ -58,16 +59,18 @@ one_iteration(struct state_t &state)
 {
 	std::vector<column_t> vars(state.instance.all_vars);
 	const size_t n(std::ceil(vars.size() * state.sample_rate));
-	const double theta(state.theta);
+	const double k(state.n_iter);
 
+	state.theta = 2 / (k + 2);
 	std::random_shuffle(vars.begin(), vars.end());
 	for (size_t i = 0; i < n; i++) {
 		coordinate_descent(state, vars[i]);
 	}
 
 	if (state.accelerated) {
-		state.theta = 0.5 * (std::sqrt(std::pow(theta, 4) + 4 * theta * theta) - theta * theta);
+		state.n_iter++;
 	}
+
 	return;
 }
 
