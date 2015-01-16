@@ -170,6 +170,51 @@ state_t::recompute_discrepancy()
 	return acc;
 }
 
+double
+state_t::projected_gradient_norm()
+{
+	svec delta;
+	double acc = 0;
+	double l_inf(0);
+	double l_one(0);
+	size_t n_vars(instance.all_vars.size());
+
+	get_x();
+	for (auto row : instance.all_rows) {
+		auto name(row->name);
+		double rhs(row->rhs);
+		double lhs(0);
+
+		for (auto it : row->vector) {
+			auto var_name(it.first);
+
+			lhs += x[var_name] * it.second.first;
+		}
+
+		delta[name] = lhs - rhs;
+	}
+
+	for (auto var : instance.all_vars) {
+		auto name(var->name);
+		double g(0);
+		double xi(x[name]);
+
+		for (auto entry : var->vector) {
+			auto row_name(entry.first);
+
+			g += entry.second.first * delta[row_name];
+		}
+
+		double xi_prime(std::min(var->max, std::max(var->min, xi - g)));
+		double delta(xi - xi_prime);
+		acc += std::pow(delta, 2);
+		l_inf = std::max(l_inf, delta);
+		l_one += std::abs(delta);
+	}
+
+	return std::max(l_one / n_vars, std::max(std::sqrt(acc) / n_vars, l_inf));
+}
+
 static double
 round_sample_rate(const struct instance_t &instance, double sample_rate)
 {

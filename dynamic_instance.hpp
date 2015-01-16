@@ -115,6 +115,7 @@ struct state_t {
 
 	const svec &get_x();
 	double recompute_discrepancy();
+	double projected_gradient_norm();
 	state_t(const struct instance_t &, double sample_rate, bool accelerated = true);
 };
 
