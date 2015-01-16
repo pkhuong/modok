@@ -98,7 +98,7 @@ estimate_value(state_t &state)
 
 	for (auto row : state.instance.all_rows) {
 		auto name(row->name);
-		auto weight(row->weight);
+		auto weight(state.instance.row_weight.find(name)->second);
 		const double delta(theta_2 * state.ru[name] + state.rz[name]);
 
 		acc += .5 * weight * std::pow(delta, 2);

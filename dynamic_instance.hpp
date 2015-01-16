@@ -22,22 +22,20 @@ typedef std::shared_ptr<column_value> column_t;
 struct row_value {
 	/* 1/2 weight |vector'x - rhs|_2^2 */
 	const char *name;
-	double weight;
 	double rhs;
 	std::map<const char *, std::pair<double, column_t> > vector;
 
 private:
-	row_value(const char *name_, double rhs_ = 0, double weight_ = 1)
+	row_value(const char *name_, double rhs_ = 0)
 		: name(name_),
-		  weight(weight_),
 		  rhs(rhs_)
 	{};
 
 public:
 	static row_t
-	make(const char *name, double rhs = 0, double weight = 1)
+	make(const char *name, double rhs = 0)
 	{
-		return row_t(new row_value(intern_string(name), rhs, weight));
+		return row_t(new row_value(intern_string(name), rhs));
 	}
 };
 
@@ -77,6 +75,7 @@ struct instance_t {
 	linear_t linear;
 	std::map<const char *, column_t> vars;
 	std::map<const char *, row_t> penalties;
+	std::map<const char *, double> row_weight;
 
 	std::vector<column_t> all_vars;
 	std::vector<row_t> all_rows;

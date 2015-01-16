@@ -34,13 +34,14 @@ instance_t::new_penalty(const char *name_, double rhs, double weight)
 
 	if (row) {
 		assert(row->rhs == rhs);
-		assert(row->weight == weight);
+		assert(row_weight[name] == weight);
 
 		return;
 	}
 
-	row = row_value::make(name, rhs, weight);
+	row = row_value::make(name, rhs);
 	all_rows.push_back(row);
+	set_weight(name, weight);
 	return;
 }
 
@@ -82,10 +83,11 @@ instance_t::set_rhs(const char *penalty_name, double rhs)
 void
 instance_t::set_weight(const char *penalty_name, double weight)
 {
-	auto penalty(penalties[intern_string(penalty_name)]);
+	const char *name(intern_string(penalty_name));
+	auto penalty(penalties[name]);
 
 	assert(penalty);
-	penalty->weight = weight;
+	row_weight[name] = weight;
 	return;
 }
 
@@ -104,7 +106,7 @@ instance_t::eval(const svec &x)
 	}
 
 	for (auto row : all_rows) {
-		const double w(row->weight);
+		const double w(row_weight[row->name]);
 		const double rhs(row->rhs);
 		double lhs(0);
 

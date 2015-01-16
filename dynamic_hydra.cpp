@@ -23,7 +23,7 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 		const double weight(it.second.first);
 		const double ax_b(theta_2 * state.ru[name] + state.rz[name]);
 
-		df += weight * it.second.second->weight * ax_b;
+		df += weight * ax_b;
 	}
 
 	const double quad(variable->step * state.theta / state.sample_rate);
