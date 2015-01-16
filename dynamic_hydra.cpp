@@ -57,16 +57,19 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 }
 
 static void
-one_iteration(struct state_t &state)
+one_iteration(struct state_t &state, std::vector<column_t> &vars)
 {
-	std::vector<column_t> vars(state.instance.all_vars);
-	const size_t n(std::ceil(vars.size() * state.sample_rate));
+	const size_t n_var(vars.size());
+	const size_t n(std::ceil(n_var * state.sample_rate));
 
 #if 0
 	state.theta = 2 / (state.n_iter + 2);
 #endif
-	std::random_shuffle(vars.begin(), vars.end());
+
 	for (size_t i = 0; i < n; i++) {
+		size_t j(i + (1.0 * random() / RAND_MAX) * (n_var - i));
+
+		std::swap(vars[i], vars[j]);
 		coordinate_descent(state, vars[i]);
 	}
 
@@ -83,9 +86,10 @@ one_iteration(struct state_t &state)
 const svec &
 hydra(struct state_t &state, size_t n)
 {
+	std::vector<column_t> vars(state.instance.all_vars);
 
 	for (size_t i = 0; i < n; i++) {
-		one_iteration(state);
+		one_iteration(state, vars);
 	}
 
 	return state.get_x();
