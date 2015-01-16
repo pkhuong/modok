@@ -27,6 +27,14 @@ coordinate_descent(struct state_t &state, const column_t &variable)
 	const double quad(variable->step * state.theta / state.sample_rate);
 	/* zero quad + df = 0 --> zero = -df / quad */
 	const double zero(-df / quad);
+	{
+		double z0 = zero * df + zero * zero * quad * .5;
+		double za = (zero - 1e-4) * df + std::pow(zero - 1e-4, 2) * quad * .5;
+		double zb = (zero + 1e-4) * df + std::pow(zero + 1e-4, 2) * quad * .5;
+
+		assert(z0 <= za);
+		assert(z0 <= zb);
+	}
 	double &z(state.z[name]);
 	const double clamped(std::max(variable->min, std::min(variable->max, zero + z)));
 	const double t(clamped - z);
