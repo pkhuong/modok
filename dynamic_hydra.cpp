@@ -93,7 +93,7 @@ update_steps(struct state_t &state)
 	const double s1(n > 1 ? n - 1 : 1);
 	const double scale_1((tau - 1) / s1);
 	const double scale_2(state.sample_rate - scale_1);
-	
+
 	for (auto var : state.instance.all_vars) {
 		double acc(0);
 
